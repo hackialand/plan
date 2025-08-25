@@ -7,7 +7,8 @@ namespace Dualys {
     enum class ChangeType {
         ADDED,
         MODIFIED,
-        REMOVED
+        REMOVED,
+        PERMISSION_CHANGED
     };
     struct FileChange {
         std::string path;
