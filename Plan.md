@@ -8,7 +8,7 @@ This document describes the public API and semantics of the Dualys::Plan class a
     - An optional immutable base plan (shared ancestry)
     - An ordered list of modification layers
 - The final state is materialized by starting from the base and applying layers in order.
-- Cloning is cheap: a clone references the original as its base without deep-copying state.
+- Cloning is inexpensive: a clone references the original as its base without a deep-copying state.
 - A simple two-way merge is provided for plans that share the same base.
 
 The state is represented as a mapping:
@@ -32,7 +32,7 @@ Represents a virtual environment state. Instances are intended to be shared via 
 
 - Plan(std::string id, std::shared_ptr<const Plan> base)
     - Create a new plan with a unique identifier and an optional base plan.
-    - If base is nullptr, the plan represents an initial empty state.
+    - If the base is nullptr, the plan represents an initial empty state.
     - The base is held as std::shared_ptr<const Plan>, signaling immutability by design and allowing structural sharing.
 
 Preconditions:
@@ -64,7 +64,7 @@ Complexity:
 - Amortized O(1).
 
 Thread-safety:
-- Not thread-safe. External synchronization required for concurrent writers/readers.
+- Not thread-safe. External synchronization is required for concurrent writers/readers.
 
 ### Cloning
 
@@ -74,7 +74,7 @@ Thread-safety:
     - Does not deep-copy the base or layers: O(1).
 
 Preconditions:
-- The current plan must be managed by a std::shared_ptr, as clone internally uses shared_from_this().
+- The current plan must be managed by a std::shared_ptr, as the clone internally uses shared_from_this().
 
 Postconditions:
 - The returned plan has id == new_id and base == this.
@@ -92,7 +92,7 @@ Complexity:
     - Change effects:
         - ADDED/MODIFIED: set path -> new content hash
         - REMOVED: erase path
-        - PERMISSION_CHANGED: currently ignored unless extended state is introduced
+        - PERMISSION_CHANGED: currently ignored unless an extended state is introduced
 
 Return:
 - A map representing the finalized view (path -> content hash).
@@ -118,12 +118,12 @@ Preconditions:
 
 Postconditions:
 - If successful, the merged plan’s base is the shared base of A and B.
-- The resulting plan’s state equals materialize(base) then apply(A.layers) then apply(B.layers).
+- The resulting plan’s state equals materialize(base), then apply(A.layers), then apply(B.layers).
 
 Complexity:
 - O(|A.layers| + |B.layers|) to construct the merged plan (not counting materialization).
 
-Limitations:
+Limitation:
 - No three-way merge with a computed common ancestor for divergent bases.
 - No explicit conflict reporting; resolution is implicit by ordering.
 

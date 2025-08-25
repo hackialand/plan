@@ -45,14 +45,20 @@ namespace Dualys {
      *
      * @class Layer
      *
-     * Represents a set of changes applied to a system or repository.
+     * Represents a logical grouping of changes applied to a system.
      *
-     * A Layer encapsulates a collection of modifications related to files,
-     * represented as `FileChange` instances, and is uniquely identifiable
-     * by its `id`.
+     * A Layer encapsulates modifications to files, detailing each change
+     * and providing a unique identifier for reference. It is commonly
+     * used to organize, track, and apply a collection of changes in
+     * version-controlled systems or similar contexts.
+     *
      */
     class Layer {
     public:
+        /**
+         *
+         */
+        Layer(std::string id);
         /**
          *
          * @var changes

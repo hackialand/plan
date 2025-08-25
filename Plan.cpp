@@ -50,6 +50,10 @@ std::map<std::string, std::string> Plan::getFileSystemState() const {
     return currentState;
 }
 
+void Plan::loadFromFile(const char *file_path) {
+
+}
+
 
 std::unique_ptr<Plan> Plan::merge(const std::string &new_id, const Plan &planA, const Plan &planB) {
     if (planA.m_base_plan != planB.m_base_plan) {

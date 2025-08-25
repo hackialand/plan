@@ -2,12 +2,11 @@
 
 #include <string>
 #include <vector>
-#include <memory> // Pour std::shared_ptr, std::unique_ptr, std::enable_shared_from_this
+#include <memory>
 #include <map>
-#include "Layer.h" // Assure-toi que Layer.h est dans le même dossier
+#include "Layer.h"
 
 namespace Dualys {
-
     class Plan : public std::enable_shared_from_this<Plan> {
         /**
          * @brief Represents the unique identifier of the plan.
@@ -91,6 +90,18 @@ namespace Dualys {
          *         the values are content hashes or other related string information.
          */
         std::map<std::string, std::string> getFileSystemState() const;
+
+        /**
+         * @brief Loads a plan configuration from a specified file.
+         *
+         * This method reads and parses the content of the file provided by the user
+         * to initialize or populate plan-related data. It is typically used to restore
+         * a saved plan configuration or to import a predefined plan.
+         *
+         * @param file_path The path to the file containing the plan configuration.
+         *        It must be a valid path readable by the application.
+         */
+        static void loadFromFile(const char *file_path);
 
         /**
          *
